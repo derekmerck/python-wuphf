@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../pycrud/.idea/pycrud.iml" filepath="$PROJECT_DIR$/../pycrud/.idea/pycrud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/python-wuphf.iml" filepath="$PROJECT_DIR$/.idea/python-wuphf.iml" />
+    </modules>
+  </component>
+</project>

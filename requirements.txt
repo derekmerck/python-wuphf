@@ -1,0 +1,13 @@
+attrs >= 18.1.0
+pyyaml
+attrs
+git+https://github.com/derekmerck/pycrud.git
+
+# For twilio service
+# twilio
+
+# For webhooks
+# requests
+
+# For app
+# click
