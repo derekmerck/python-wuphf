@@ -1,10 +1,13 @@
-# python-wuphf
+# Python-WUPHF
 
-Derek Merck
-<derek.merck@ufl.edu>
-Summer 2019
+Derek Merck  
+University of Florida at Gainesville  
+Summer 2019  
 
-[PyCRUD](https://github.com/derekmerck/pycrud) messenger endpoints and dispatcher daemon for channeled broadcasts.
+[Python-CRUD][] messenger endpoints and dispatcher daemon for channeled broadcasts.  Converts generic endpoint "Items" into messages using [Jinja2][] templates.
+
+[python-crud]: https://github.com/derekmerck/pycrud
+[jinja2]: https://palletsprojects.com/p/jinja/
 
 See "tests" for sample use cases.
 
