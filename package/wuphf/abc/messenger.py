@@ -8,7 +8,7 @@ from crud.utils import render_template
 class Messenger(Endpoint):
 
     target = attr.ib(default=None)
-    msg_t = attr.ib(default=None)
+    msg_t = attr.ib(default="{{msg_text}}")
 
     # String send
     def _send(self, msg, target, **kwargs):

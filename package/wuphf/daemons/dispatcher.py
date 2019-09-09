@@ -7,18 +7,11 @@ from crud.abc import Endpoint
 from ..endpoints import SmtpMessenger, EmailSMSMessenger, TwilioMessenger, SlackMessenger
 
 
-def all_lower(_list):
-    result = []
-    for item in _list:
-        result.append(item.lower())
-    return result
-
-
 @attr.s
 class Message:
 
     data = attr.ib()
-    channels = attr.ib(default=None, convert=all_lower)
+    channels = attr.ib(default=None)
 
 
 class Transport(Enum):
@@ -33,7 +26,7 @@ class Subscriber:
 
     name = attr.ib(default=None)
     role = attr.ib(default=None)
-    channels = attr.ib(factory=list, convert=all_lower)
+    channels = attr.ib(factory=list)
 
     # Transports
     email = attr.ib(default=None)
@@ -58,6 +51,8 @@ class Subscriber:
         return result
 
     def listening(self, channels):
+        if "all" in channels:
+            return True
         for c in ["all", *channels]:
             if c in self.channels:
                 return True
@@ -68,14 +63,14 @@ class Dispatcher(Endpoint):
 
     message_queue = attr.ib(init=False, factory=Queue)
 
-    subscriptions_desc = attr.ib(default=None, type=Mapping)
+    subscriptions_desc = attr.ib(default=None, type=Mapping, repr=False)
     subscriptions = attr.ib(type=list)
     @subscriptions.default
     def create_subscriptions(self):
         if self.subscriptions_desc:
             subscriptions = []
             for item in self.subscriptions_desc:
-                channels = item["channel"]
+                channels = [item["channel"]]
                 for subscriber in item["subscribers"]:
                     subscriptions.append(Subscriber(**subscriber, channels=channels))
             return subscriptions
@@ -130,3 +125,7 @@ class Dispatcher(Endpoint):
         while True:
             self.handle_queue()
             time.sleep(1.0)
+
+from crud.abc import Serializable
+Serializable.Factory.registry["Dispatcher"] = Dispatcher
+print(Serializable.Factory.registry)

@@ -1,0 +1,30 @@
+# Sample services and subscriptions for dispatcher test
+---
+smtp_messenger:  &SMTP_MESSENGER
+  ctype:    SmtpMessenger
+  host:     smtp.gmail.com
+  user:     $TEST_SMTP_USER
+  password: $TEST_SMTP_PASSWORD
+  port:     587
+  tls:      True
+
+subscriptions: &SUBSCRIPTIONS
+- channel: project
+  subscribers:
+    - name:  Test User 0
+      email: $TEST_EMAIL_RCV0
+
+- channel: project/site1
+  subscribers:
+    - name:  Test User 1
+      email: $TEST_EMAIL_RCV1
+
+- channel: project/site2
+  subscribers:
+    - name:  Test User 2
+      email: $TEST_EMAIL_RCV2
+
+dispatcher:
+  ctype: Dispatcher
+  smtp_messenger_desc: *SMTP_MESSENGER
+  subscriptions_desc:  *SUBSCRIPTIONS
