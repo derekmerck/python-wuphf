@@ -12,3 +12,7 @@ Summer 2019
 See "tests" for sample use cases.
 
 <https://en.wikipedia.org/wiki/WUPHF.com>
+
+## License
+
+MIT

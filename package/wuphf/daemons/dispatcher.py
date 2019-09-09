@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Mapping
 import time
 import attr
-from crud.abc import Endpoint
+from crud.abc import Endpoint, DaemonMixin, Serializable
 from ..endpoints import SmtpMessenger, EmailSMSMessenger, TwilioMessenger, SlackMessenger
 
 
@@ -59,9 +59,7 @@ class Subscriber:
 
 
 @attr.s
-class Dispatcher(Endpoint):
-
-    message_queue = attr.ib(init=False, factory=Queue)
+class Dispatcher(Endpoint, DaemonMixin):
 
     subscriptions_desc = attr.ib(default=None, type=Mapping, repr=False)
     subscriptions = attr.ib(type=list)
@@ -100,32 +98,25 @@ class Dispatcher(Endpoint):
 
     def put(self, data, channels=None):
         message = Message(data=data, channels=channels)
-        self.message_queue.put(message)
+        self.job_queue.put(message)
 
-    def handle_queue(self, dryrun=False):
-        while not self.message_queue.empty():
-            message = self.message_queue.get()
-            for subscriber in self.subscriptions:
-                if subscriber.listening(message.channels):
-                    print("{} received {}".format(subscriber.name, message.data))
-                    transports = subscriber.get_transports()
-                    for k, v in transports.items():
-                        print(v)
-                        ep = self.messengers.get(k)
-                        if ep:
-                            ep.send(message.data, **v, dryrun=dryrun)
-                        else:
-                            print("No relay available for {}: {}".format(k, v))
+    def handle_item(self, item, dryrun=False):
+        for subscriber in self.subscriptions:
+            if subscriber.listening(item.channels):
+                print("{} received {}".format(subscriber.name, item.data))
+                transports = subscriber.get_transports()
+                for k, v in transports.items():
+                    print(v)
+                    ep = self.messengers.get(k)
+                    if ep:
+                        ep.send(item.data, **v, dryrun=dryrun)
+                    else:
+                        print("No relay available for {}: {}".format(k, v))
 
-        # Only send 1 email, with all to_addrs together
-        # Only submit to slack channel once
-        # Send twilio phone message to all numbers (only 1nce each)
-
-    def run(self):
+    def run(self, dryrun=False):
         while True:
             self.handle_queue()
             time.sleep(1.0)
 
-from crud.abc import Serializable
+
 Serializable.Factory.registry["Dispatcher"] = Dispatcher
-print(Serializable.Factory.registry)

@@ -5,7 +5,8 @@ from wuphf.endpoints.smtp_messenger import sample_msg
 
 DRYRUN = True
 
-def test_smtp_messenger():
+
+def test_smtp_messenger(capsys):
 
     m = SmtpMessenger(
         host="smtp.gmail.com",
@@ -19,6 +20,12 @@ def test_smtp_messenger():
 
     to_addr = os.environ.get("TEST_EMAIL_RECEIVER")
     m.send({"msg_text": "Have a great day!"}, to_addr, dryrun=DRYRUN)
+
+    exp1 = """The message is: "Have a great day"""
+
+    if capsys:
+        captured = capsys.readouterr()
+        assert exp1 in captured.out
 
 
 def test_email_sms_messenger():

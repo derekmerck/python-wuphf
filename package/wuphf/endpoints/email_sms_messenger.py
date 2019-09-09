@@ -1,3 +1,4 @@
+from crud.abc import Serializable
 from .smtp_messenger import SmtpMessenger
 
 
@@ -20,3 +21,6 @@ class EmailSMSMessenger(SmtpMessenger):
             raise ValueError("Unknown carrier: {}".format(carrier))
         to_addr = '%s@%s' % (to_number, self.relays.get(carrier))
         SmtpMessenger._send(self, msg, to_addr)
+
+
+Serializable.Factory.registry["EmailSMSMessenger"] = EmailSMSMessenger

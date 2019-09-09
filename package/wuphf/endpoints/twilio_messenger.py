@@ -1,6 +1,7 @@
 import logging
 import attr
 from twilio.rest import TwilioRestClient
+from crud.abc import Serializable
 from ..abc import Messenger
 
 
@@ -23,3 +24,6 @@ class TwilioMessenger(Messenger):
         logger.info("Sending message via twilio connector:\n{}".format(msg))
 
         msg_obj = self.gateway.messages.create(body=msg, to=to_number, from_=self.from_number)
+
+
+Serializable.Factory.registry["TwilioMessenger"] = TwilioMessenger
