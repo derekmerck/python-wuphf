@@ -24,6 +24,6 @@ setuptools.setup(
 
     entry_points='''
         [console_scripts]
-        wuphf-cli=cli:main
+        wuphf-cli=wuphf_cli.cli:main
     ''',
 )
