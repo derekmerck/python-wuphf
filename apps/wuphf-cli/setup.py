@@ -1,5 +1,4 @@
-import setuptools, re
-from wuphf import __version__
+import setuptools
 
 with open("README.md") as f:
     long_description = f.read()
