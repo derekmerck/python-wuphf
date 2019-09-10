@@ -26,8 +26,7 @@ setuptools.setup(
     license='MIT',
     install_requires=["attrs >= 18.1.0",
                       "requests",
-                      "pyyaml",
-                      "git+https://github.com/derekmerck/pycrud.git"],
+                      "pyyaml"],
     extras_require={
         'twilio': 'twilio'
     }

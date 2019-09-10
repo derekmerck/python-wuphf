@@ -1,22 +1,14 @@
 import setuptools, re
+from wuphf import __version__
 
 with open("README.md") as f:
     long_description = f.read()
 
-with open("requirements.txt") as f:
-    reqs = f.read().splitlines()
-
-with open("wuphf_cli/__init__.py") as f:
-    content = f.read()
-    match = re.findall(r"__([a-z0-9_]+)__\s*=\s*\"([^\"]+)\"", content)
-    print(match)
-    metadata = dict(match)
-
 setuptools.setup(
-    name=metadata.get("name"),
-    version=metadata.get("version"),
-    author=metadata.get("author"),
-    author_email=metadata.get("author_email"),
+    name="wuphf_cli",
+    version="1.0.0",
+    author="Derek Merck",
+    author_email="derek.merck@ufl.edu",
     description="Command line interface for WUPHF",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -29,10 +21,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
     license='MIT',
-    install_requires=reqs,
+    install_requires=["click"],
 
     entry_points='''
         [console_scripts]
-        wuphf-cli=wuphf_cli.cli:main
+        wuphf-cli=cli:main
     ''',
 )
