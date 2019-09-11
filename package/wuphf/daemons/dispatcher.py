@@ -98,6 +98,7 @@ class Dispatcher(Endpoint, DaemonMixin):
 
     def put(self, data, channels=None, msg_t=None):
         logger = logging.getLogger(self.__class__.__name__)
+        print("Putting in queue (test)")
         logger.debug("Putting item in queue")
         message = Message(data=data, channels=channels)
         self.job_queue.put(message)
