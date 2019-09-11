@@ -1,10 +1,10 @@
-from queue import Queue
+import logging
 from enum import Enum
 from typing import Mapping
 import time
 import attr
 from crud.abc import Endpoint, DaemonMixin, Serializable
-from ..endpoints import SmtpMessenger, EmailSMSMessenger, TwilioMessenger, SlackMessenger
+from ..endpoints import SmtpMessenger, EmailSMSMessenger, SlackMessenger
 
 
 @attr.s
@@ -97,10 +97,15 @@ class Dispatcher(Endpoint, DaemonMixin):
         self.subscriptions.append(Subscriber(**subscriber))
 
     def put(self, data, channels=None):
+        logger = logging.getLogger(self.__class__.__name__)
+        logger.debug("Putting item in queue")
         message = Message(data=data, channels=channels)
         self.job_queue.put(message)
+        logger.debug("Queue is empty ({})".format(self.job_queue.empty()))
 
     def handle_item(self, item, dryrun=False):
+        logger = logging.getLogger(self.__class__.__name__)
+        logger.debug("Handling item")
         for subscriber in self.subscriptions:
             if subscriber.listening(item.channels):
                 print("{} received {}".format(subscriber.name, item.data))
@@ -119,4 +124,5 @@ class Dispatcher(Endpoint, DaemonMixin):
             time.sleep(1.0)
 
 
+#Dispatcher.register()
 Serializable.Factory.registry["Dispatcher"] = Dispatcher

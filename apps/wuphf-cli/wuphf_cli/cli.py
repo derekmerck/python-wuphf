@@ -2,6 +2,8 @@ import logging, os
 import yaml
 import click
 from wuphf import __version__
+from crud.endpoints import *
+from crud.daemons import *
 from wuphf.endpoints import *
 from wuphf.daemons import *
 from crud.manager import EndpointManager
@@ -9,7 +11,7 @@ from crud.cli import *
 from wuphf.cli import *
 
 epilog = """
-SERVICES is a required platform endpoint description in yaml format.
+SERVICES or SERVICE_PATH is a required platform endpoint description in yaml format.
 
 \b
 ---
@@ -33,10 +35,10 @@ email:
 @click.option('-s', '--services', type=click.STRING,
               help="WUPHF service desc as yaml format string")
 @click.option('-S', '--services_path', type=click.Path(exists=True),
-              help="WUPHF service desc as a yaml format file or directory of files")
+              help="WUPHF service desc as a yaml format file")
 @click.pass_context
 def cli(ctx, verbose, services, services_path):
-    """Call wuphf endpoints using a command-line interface."""
+    """Call WUPHF endpoints using a command-line interface."""
 
     if verbose:
         logging.basicConfig(level=logging.DEBUG)
