@@ -1,10 +1,5 @@
 attrs >= 18.1.0
 pyyaml
-attrs
 requests
-
-# For twilio service
 twilio
-
-# For app
-click
+python-crud @ git+https://github.com/derekmerck/pycrud

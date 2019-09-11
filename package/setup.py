@@ -1,5 +1,12 @@
 import re
 import setuptools
+from pathlib import Path
+
+with open("../README.md") as f:
+    long_description = f.read()
+
+with open("../requirements.txt") as f:
+    reqs = f.read().splitlines()
 
 with open("wuphf/__init__.py") as f:
     content = f.read()
@@ -12,10 +19,10 @@ setuptools.setup(
     version=metadata.get("version"),
     author=metadata.get("author"),
     author_email=metadata.get("author_email"),
-    description="PyCRUD messenger endpoints",
-    # long_description=long_description,
-    # long_description_content_type="text/markdown",
-    url="https://github.com/derekmerck/python-wuphf",
+    description=metadata.get("desc"),
+    url=metadata.get("url"),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
     classifiers=(
         'Development Status :: 3 - Alpha',
@@ -24,10 +31,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
     license='MIT',
-    install_requires=["attrs >= 18.1.0",
-                      "requests",
-                      "pyyaml"],
-    extras_require={
-        'twilio': 'twilio'
-    }
+    install_requires=reqs
 )
