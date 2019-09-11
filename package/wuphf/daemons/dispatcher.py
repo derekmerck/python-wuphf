@@ -96,7 +96,7 @@ class Dispatcher(Endpoint, DaemonMixin):
     def add_subscriber(self, subscriber):
         self.subscriptions.append(Subscriber(**subscriber))
 
-    def put(self, data, channels=None):
+    def put(self, data, channels=None, msg_t=None):
         logger = logging.getLogger(self.__class__.__name__)
         logger.debug("Putting item in queue")
         message = Message(data=data, channels=channels)
@@ -114,7 +114,7 @@ class Dispatcher(Endpoint, DaemonMixin):
                     print(v)
                     ep = self.messengers.get(k)
                     if ep:
-                        ep.send(item.data, **v, dryrun=dryrun)
+                        ep.send(item.data, **v, recipient=subscriber, dryrun=dryrun)
                     else:
                         print("No relay available for {}: {}".format(k, v))
 

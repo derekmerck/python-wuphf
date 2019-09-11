@@ -9,6 +9,7 @@ class Messenger(Endpoint):
 
     target = attr.ib(default=None)
     msg_t = attr.ib(default="{{msg_text}}")
+    wrap = attr.ib(default=70)
 
     # String send
     def _send(self, msg, target, **kwargs):
@@ -24,10 +25,12 @@ class Messenger(Endpoint):
         if not msg_t:
             raise ValueError("No message template provided")
 
-        if hasattr(item, 'meta'):
-            data = item.meta
-        elif isinstance(item, dict):
+        if isinstance(item, dict):
             data = item
+        elif hasattr(item, 'data'):
+            data = item.data
+        elif hasattr(item, 'meta'):
+            data = item.meta
         else:
             raise TypeError("Cannot convert {} to mapping")
 
