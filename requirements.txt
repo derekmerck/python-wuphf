@@ -2,4 +2,4 @@ attrs >= 18.1.0
 pyyaml
 requests
 twilio
-python-crud @ git+https://github.com/derekmerck/pycrud
+python-crud @ git+https://github.com/derekmerck/pycrud#subdirectory=package
