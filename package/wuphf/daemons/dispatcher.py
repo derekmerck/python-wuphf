@@ -115,7 +115,7 @@ class Dispatcher(Endpoint, DaemonMixin):
                     print(v)
                     ep = self.messengers.get(k)
                     if ep:
-                        ep.send(item.data, **v, recipient=subscriber, dryrun=dryrun)
+                        ep.send(item.data, **v, target=subscriber, dryrun=dryrun)
                     else:
                         print("No relay available for {}: {}".format(k, v))
 
