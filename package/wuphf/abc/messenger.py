@@ -21,7 +21,7 @@ def check_file_ref(_value):
                 return value
         except FileNotFoundError:
             logging.warning("WARNING: Inferred file name from {}, but file is missing or misformed!".format(value))
-    return value
+    return _value
 
 
 @attr.s
