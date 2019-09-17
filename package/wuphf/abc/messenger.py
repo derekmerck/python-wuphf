@@ -1,19 +1,26 @@
 import logging
+import yaml
+import json
 from typing import Union, Mapping
 import attr
 from crud.abc import Endpoint, Item
 from crud.utils import render_template
 
 
-def check_file_ref(value):
-    if isinstance(value, str) and value.startswith("@"):
+def check_file_ref(_value):
+    if isinstance(_value, str) and _value.startswith("@"):
         try:
-            fn = value[1:]
+            fn = _value[1:]
             with open(fn) as f:
-                value = f.read()
+                if fn.endswith(".yaml"):
+                    value = yaml.load(f)
+                elif fn.endswith(".json"):
+                    value = json.loads(f)
+                else:
+                    value = f.read()
                 return value
         except FileNotFoundError:
-            logging.warning("WARNING: Inferred file name from {}, but file is missing!".format(value))
+            logging.warning("WARNING: Inferred file name from {}, but file is missing or misformed!".format(value))
     return value
 
 
