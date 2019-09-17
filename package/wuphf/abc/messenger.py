@@ -13,10 +13,13 @@ def check_file_ref(_value):
             fn = _value[1:]
             with open(fn) as f:
                 if fn.endswith(".yaml"):
+                    logging.debug("Reading yaml file {}".format(_value))
                     value = yaml.load(f)
                 elif fn.endswith(".json"):
+                    logging.debug("Reading json file {}".format(_value))
                     value = json.loads(f)
                 else:
+                    logging.debug("Reading txt file {}".format(_value))
                     value = f.read()
                 return value
         except FileNotFoundError:
