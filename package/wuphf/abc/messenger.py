@@ -1,4 +1,5 @@
 import logging
+import os
 import yaml
 import json
 from typing import Union, Mapping
@@ -12,15 +13,17 @@ def check_file_ref(_value):
         try:
             fn = _value[1:]
             with open(fn) as f:
+                content = f.read()
+                content = os.path.expandvars(content)
                 if fn.endswith(".yaml"):
                     logging.debug("Reading yaml file {}".format(_value))
-                    value = yaml.load(f)
+                    value = yaml.load(content)
                 elif fn.endswith(".json"):
                     logging.debug("Reading json file {}".format(_value))
-                    value = json.loads(f)
+                    value = json.loads(content)
                 else:
                     logging.debug("Reading txt file {}".format(_value))
-                    value = f.read()
+                    value = content
                 return value
         except FileNotFoundError:
             logging.warning("WARNING: Inferred file name from {}, but file is missing or misformed!".format(value))
