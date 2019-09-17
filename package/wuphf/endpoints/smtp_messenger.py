@@ -13,6 +13,10 @@ The WUPHF message is: "{{ msg_text }}"
 """
 
 
+def is_true(value):
+    return value in ["true", "True", "TRUE", True, 1]
+
+
 @attr.s
 class SmtpMessenger(Messenger):
 
@@ -20,7 +24,7 @@ class SmtpMessenger(Messenger):
     port = attr.ib(default=22)
     user = attr.ib(default="admin")
     password = attr.ib(default="passw0rd!")
-    tls = attr.ib(default=False)
+    tls = attr.ib(default=False, converter=is_true)
 
     from_addr = attr.ib()
     @from_addr.default
@@ -29,6 +33,9 @@ class SmtpMessenger(Messenger):
 
     class gateway(object):
         def __init__(self, host, port=22, user=None, password=None, tls=False):
+
+            logging.debug([host, port, user, password, tls])
+
             self.gateway = smtplib.SMTP(host, port)
             if tls:
                 self.gateway.starttls()
