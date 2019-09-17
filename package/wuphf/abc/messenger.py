@@ -4,11 +4,24 @@ import attr
 from crud.abc import Endpoint, Item
 from crud.utils import render_template
 
+
+def check_file_ref(value):
+    if isinstance(value, str) and value.startswith("@"):
+        try:
+            fn = value[1:]
+            with open(fn) as f:
+                value = f.read()
+                return value
+        except FileNotFoundError:
+            logging.warning("WARNING: Inferred file name from {}, but file is missing!".format(value))
+    return value
+
+
 @attr.s
 class Messenger(Endpoint):
 
     target = attr.ib(default=None)
-    msg_t = attr.ib(default="{{msg_text}}")
+    msg_t = attr.ib(default="{{msg_text}}", converter=check_file_ref)
     wrap = attr.ib(default=70)
 
     # String send
