@@ -21,9 +21,9 @@ def is_true(value):
 class SmtpMessenger(Messenger):
 
     host = attr.ib(default="smtp.example.com")
-    port = attr.ib(default=22)
-    user = attr.ib(default="admin")
-    password = attr.ib(default="passw0rd!")
+    port = attr.ib(default=25)
+    user = attr.ib(default=None)
+    password = attr.ib(default=None)
     tls = attr.ib(default=False, converter=is_true)
 
     from_addr = attr.ib()
