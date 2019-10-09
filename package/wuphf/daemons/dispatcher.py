@@ -25,9 +25,9 @@ class Transport(Enum):
 @attr.s
 class Subscriber:
 
-    name = attr.ib(default=None)
-    role = attr.ib(default=None)
-    channels = attr.ib(factory=list)
+    name = attr.ib()
+    channels = attr.ib()
+    meta = attr.ib(factory=dict)
 
     # Transports
     email = attr.ib(default=None)
@@ -71,7 +71,14 @@ class Dispatcher(Endpoint, DaemonMixin):
             for item in self.subscriptions_desc:
                 channels = [item["channel"]]
                 for subscriber in item["subscribers"]:
-                    subscriptions.append(Subscriber(**subscriber, channels=channels))
+                    s = Subscriber(
+                        subscriber.get("name"),
+                        channels,
+                        meta={**item.get("meta", {}),
+                              **subscriber.get("meta", {})
+                              }
+                        )
+                    subscriptions.append(s)
             return subscriptions
 
     smtp_messenger_desc = attr.ib(default=None, type=Mapping)
