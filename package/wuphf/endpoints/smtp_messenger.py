@@ -32,7 +32,7 @@ class SmtpMessenger(Messenger):
         return "{}@{}".format(self.user, self.host)
 
     class gateway(object):
-        def __init__(self, host, port=22, user=None, password=None, tls=False):
+        def __init__(self, host, port=25, user=None, password=None, tls=False):
 
             logging.debug([host, port, user, password, tls])
 
@@ -52,6 +52,7 @@ class SmtpMessenger(Messenger):
     def check(self):
         with self.gateway(self.host, self.port, self.user, self.password, self.tls) as g:
             g.helo()
+        return True
 
     def _send(self, msg, to_addrs):
 

@@ -10,7 +10,6 @@ from ..endpoints import SmtpMessenger, EmailSMSMessenger, SlackMessenger
 
 @attr.s
 class Message:
-
     data = attr.ib()
     channels = attr.ib(default=None)
 
@@ -24,7 +23,6 @@ class Transport(Enum):
 
 @attr.s
 class Subscriber:
-
     name = attr.ib()
     channels = attr.ib()
     meta = attr.ib(factory=dict)
@@ -62,7 +60,7 @@ class Subscriber:
 @attr.s
 class Dispatcher(Endpoint, DaemonMixin):
 
-    subscriptions_desc = attr.ib(default=None, type=Mapping, repr=False, convert=check_file_ref)
+    subscriptions_desc = attr.ib(default=None, type=Mapping, repr=False, converter=check_file_ref)
     subscriptions = attr.ib(type=list)
     @subscriptions.default
     def create_subscriptions(self):
@@ -73,6 +71,7 @@ class Dispatcher(Endpoint, DaemonMixin):
                 for subscriber in item["subscribers"]:
                     s = Subscriber(
                         subscriber.get("name"),
+                        subscriber.get("email"),
                         channels,
                         meta={**item.get("meta", {}),
                               **subscriber.get("meta", {})
@@ -80,6 +79,8 @@ class Dispatcher(Endpoint, DaemonMixin):
                         )
                     subscriptions.append(s)
             return subscriptions
+        else:
+            return []
 
     smtp_messenger_desc = attr.ib(default=None, type=Mapping)
     smtp_messenger = attr.ib(type=SmtpMessenger)
@@ -137,5 +138,4 @@ class Dispatcher(Endpoint, DaemonMixin):
             time.sleep(1.0)
 
 
-#Dispatcher.register()
 Serializable.Factory.registry["Dispatcher"] = Dispatcher
