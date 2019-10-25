@@ -1,20 +1,19 @@
-import yaml
 import click
 from pprint import pformat
+from crud.cli.utils import ClickEndpoint, CLICK_MAPPING
+from wuphf.abc import Messenger
 
-from crud.cli.utils import validate_dict, validate_endpoint
 
-
-@click.command(short_help="Send message via endpoint")
-@click.argument('messenger', callback=validate_endpoint, type=click.STRING)
-@click.option('--data', callback=validate_dict, type=click.STRING)
+@click.command(short_help="Send items via Messenger endpoint")
+@click.argument('messenger', type=ClickEndpoint(expects=Messenger))
+@click.option('--data', type=CLICK_MAPPING)
 @click.option('--target', '-t', type=click.STRING,
               help="Optional target, if not using a dedicated messenger")
 @click.option('--msg_t', '-m', type=click.STRING,
               help="Optional message template")
 @click.pass_context
-def cli(ctx, messenger, data, target, msg_t):
-    """Send data or chained items via endpoint
+def wsend(ctx, messenger, data, target, msg_t):
+    """Send data or chained items via Messenger endpoint
 
     \b
     $ wuphf-cli send -t test@example.com gmail:user:pword "msg_text: Hello 123"

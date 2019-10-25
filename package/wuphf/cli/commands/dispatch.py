@@ -1,23 +1,23 @@
 import click
 from typing import Mapping
-from crud.cli.utils import validate_endpoint, validate_dict, validate_array
+from crud.cli.utils import ClickEndpoint, CLICK_MAPPING, CLICK_ARRAY
 from wuphf.endpoints import SmtpMessenger
 
 
-@click.command(short_help="Send data or chained items to dispatcher channels")
+@click.command(short_help="Dispatch items to subscribers by channel")
 @click.option('--config', '-C',          type=click.File(),
               default="@/subscriptions.yaml")
-@click.option('--email-messenger', '-E', type=click.STRING, callback=validate_endpoint)
-@click.option('--slack-messenger',       type=click.STRING, callback=validate_endpoint)
-@click.option('--sms-messenger',         type=click.STRING, callback=validate_endpoint)
-@click.option('--data',                  type=click.STRING, callback=validate_dict)
+@click.option('--email-messenger', '-E', type=ClickEndpoint(expects=SmtpMessenger))
+# @click.option('--slack-messenger',       type=click.STRING, callback=validate_endpoint)
+# @click.option('--sms-messenger',         type=click.STRING, callback=validate_endpoint)
+@click.option('--data',                  type=CLICK_MAPPING)
 @click.option('--template', '-T',        type=click.File())
-@click.option('--channels', '-H',        type=click.STRING, callback=validate_array,
+@click.option('--channels', '-H',        type=CLICK_ARRAY,
               help="Channel list, use $field to reference item data or meta, like \"$project-$site\"")
 @click.option("--dryrun/--wetrun", "-D/-W", default=True)
 @click.pass_context
-def cli(ctx, config, email_messenger: SmtpMessenger, slack_messenger, sms_messenger,
-        data: Mapping, template, channels, dryrun: bool):
+def dispatch(ctx, config, email_messenger: SmtpMessenger, slack_messenger, sms_messenger,
+             data: Mapping, template, channels, dryrun: bool):
     """Dispatch data or chained items to subscribers by channel
     
     \b
