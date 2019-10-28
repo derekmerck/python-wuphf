@@ -91,7 +91,7 @@ class MyDispatcher(Endpoint):
 
     def put(self, item: Mapping, channels: List):
         for s, c in self.subscribers_for(channels):
-            _item = {"item": {**item},
+            _item = {"item": item,
                      "channel": attr.asdict(self.channels[c]),
                      "recipient": attr.asdict(s)}
             self.queue.append((_item, s))
@@ -113,11 +113,23 @@ class MyDispatcher(Endpoint):
             messenger.send(_item, dest)
         else:
             logging.info("DRYRUN: item {} sent to {}".format(_item["item"], dest))
+            logging.info(messenger.get(_item, dest))
+
+    def peek_item(self, item: tuple):
+        _item, sub = item
+        messenger, dest = self.messenger_for(sub)
+        return messenger.get(_item, dest)
 
     def handle_queue(self, dryrun=False):
         while len(self.queue) > 0:
             item: tuple = self.queue.pop()
             self.handle_item(item, dryrun=dryrun)
+
+    def peek_queue(self):
+        rv = []
+        for item in self.queue:
+            rv.append( self.peek_item(item) )
+        return rv
 
 
 if __name__ == "__main__":

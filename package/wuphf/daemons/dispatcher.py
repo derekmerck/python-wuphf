@@ -4,7 +4,7 @@ from typing import Mapping
 import time
 import attr
 from crud.abc import Endpoint, DaemonMixin, Serializable
-from ..abc.messenger import check_file_ref
+from crud.utils import deserialize_dict
 from ..endpoints import SmtpMessenger, EmailSMSMessenger, SlackMessenger
 
 
@@ -60,7 +60,7 @@ class Subscriber:
 @attr.s
 class Dispatcher(Endpoint, DaemonMixin):
 
-    subscriptions_desc = attr.ib(default=None, type=Mapping, repr=False, converter=check_file_ref)
+    subscriptions_desc = attr.ib(default=None, type=Mapping, repr=False, converter=deserialize_dict)
     subscriptions = attr.ib(type=list)
     @subscriptions.default
     def create_subscriptions(self):

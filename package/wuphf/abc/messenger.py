@@ -6,36 +6,18 @@ from typing import Union, Mapping
 import attr
 from crud.abc import Endpoint, Item
 from crud.utils import render_template
-
-
-def check_file_ref(_value):
-    if isinstance(_value, str) and _value.startswith("@"):
-        try:
-            fn = _value[1:]
-            with open(fn) as f:
-                content = f.read()
-                content = os.path.expandvars(content)
-                if fn.endswith(".yaml"):
-                    logging.debug("Reading yaml file {}".format(_value))
-                    value = yaml.load(content)
-                elif fn.endswith(".json"):
-                    logging.debug("Reading json file {}".format(_value))
-                    value = json.loads(content)
-                else:
-                    logging.debug("Reading txt file {}".format(_value))
-                    value = content
-                return value
-        except FileNotFoundError:
-            logging.warning("WARNING: Inferred file name from {}, but file is missing or misformed!".format(value))
-    return _value
+from crud.utils import deserialize_str
 
 
 @attr.s
 class Messenger(Endpoint):
 
     target = attr.ib(default=None)
-    msg_t = attr.ib(default="{{msg_text}}", converter=check_file_ref)
+    msg_t = attr.ib(default="{{msg_text}}", converter=deserialize_str)
     wrap = attr.ib(default=70)
+
+    def set_msg_t(self, value):
+        self.msg_t = deserialize_str(value)
 
     # String send
     def _send(self, msg, target, **kwargs):
