@@ -1,8 +1,9 @@
 # Python-WUPHF
 
 Derek Merck  
-University of Florida at Gainesville  
-Summer 2019  
+<derek.merck@ufl.edu>  
+University of Florida and Shands Hospital  
+Gainesville, FL  
 
 [Python-CRUD][] messenger endpoints and dispatcher daemon for channeled broadcasts.  Converts generic endpoint "Items" into messages using [Jinja2][] templates.
 
