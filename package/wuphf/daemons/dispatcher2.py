@@ -17,8 +17,7 @@ class MyDispatcher(Endpoint):
     @attr.s
     class Channel:
         tag = attr.ib(type=str)
-        incoming = attr.ib(type=str)
-        project = attr.ib(type=str)
+        trial = attr.ib(type=str)
         site = attr.ib(type=str)
 
     def add_channel(self, tag, desc):
