@@ -1,1 +1,1 @@
-from .dispatcher2 import MyDispatcher as Dispatcher
+from .dispatcher import Dispatcher, Subscriber, Sender

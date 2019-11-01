@@ -16,6 +16,9 @@ class Messenger(Endpoint):
     msg_t = attr.ib(default="{{msg_text}}", converter=deserialize_str)
     wrap = attr.ib(default=70)
 
+    # Any special template funcs from the caller
+    j2_funcs = attr.ib(factory=dict)
+
     def set_msg_t(self, value):
         self.msg_t = deserialize_str(value)
 
@@ -45,7 +48,7 @@ class Messenger(Endpoint):
         if hasattr(self, "from_addr"):
             data["from_addr"] = self.from_addr
 
-        msg = render_template(msg_t, target=target, **data, **kwargs )
+        msg = render_template(msg_t, target=target, funcs=self.j2_funcs, **data, **kwargs )
         return msg
 
     # Item send with template
@@ -56,3 +59,5 @@ class Messenger(Endpoint):
         else:
             logger = logging.getLogger(self.name)
             logger.info("Dry run message is:\n{}".format(msg))
+
+        return msg
