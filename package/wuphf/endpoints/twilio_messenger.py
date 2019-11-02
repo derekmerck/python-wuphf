@@ -25,5 +25,4 @@ class TwilioMessenger(Messenger):
 
         msg_obj = self.gateway.messages.create(body=msg, to=to_number, from_=self.from_number)
 
-
-Serializable.Factory.registry["TwilioMessenger"] = TwilioMessenger
+TwilioMessenger.register()

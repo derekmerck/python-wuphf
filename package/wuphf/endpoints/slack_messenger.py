@@ -3,7 +3,6 @@ import logging
 import attr
 import requests
 from ..abc import Messenger
-from crud.abc import Serializable
 
 
 @attr.s
@@ -24,5 +23,4 @@ class SlackMessenger(Messenger):
         headers = {'content-type': 'application/json'}
         requests.post(self.url, json.dumps(payload), headers=headers)
 
-
-Serializable.Factory.registry["SlackMessenger"] = SlackMessenger
+SlackMessenger.register()

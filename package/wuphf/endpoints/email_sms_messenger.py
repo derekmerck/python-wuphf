@@ -23,4 +23,4 @@ class EmailSMSMessenger(SmtpMessenger):
         SmtpMessenger._send(self, msg, to_addr)
 
 
-Serializable.Factory.registry["EmailSMSMessenger"] = EmailSMSMessenger
+EmailSMSMessenger.register()

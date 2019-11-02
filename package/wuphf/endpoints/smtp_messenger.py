@@ -2,7 +2,6 @@ import logging
 import smtplib
 import attr
 from ..abc import Messenger
-from crud.abc import Serializable
 
 sample_msg = """
 To: {{ target }}
@@ -63,4 +62,4 @@ class SmtpMessenger(Messenger):
             g.sendmail(self.from_addr, to_addrs, msg.encode(encoding='UTF-8'))
 
 
-Serializable.Factory.registry["SmtpMessenger"] = SmtpMessenger
+SmtpMessenger.register()

@@ -4,13 +4,13 @@ import yaml
 import json
 from typing import Union, Mapping
 import attr
-from crud.abc import Endpoint, Item
+from crud.abc import Endpoint, Serializable, Item
 from crud.utils import render_template
 from crud.utils import deserialize_str
 
 
 @attr.s
-class Messenger(Endpoint):
+class Messenger(Endpoint, Serializable):
 
     target = attr.ib(default=None)
     msg_t = attr.ib(default="{{msg_text}}", converter=deserialize_str)
