@@ -1,3 +1,7 @@
+"""
+Simple default messenger that prints items to the terminal
+"""
+
 from pprint import pprint
 import attr
 
