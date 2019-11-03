@@ -1,3 +1,0 @@
-click
-gistsig @ git+https://github.com/derekmerck/gistsig
-python-wuphf @ git+https://github.com/derekmerck/python-wuphf#subdirctory=package
